@@ -37,6 +37,7 @@ prompt_input(const char *prompt, struct input *input)
 	int last_buf_length = promptlen ? -1 : promptlen;
 
 	input->buf[0] = 0;
+	input->status[0] = 0;
 
 	while (status == INPUT_OK || status == INPUT_SKIP) {
 		int buf_length = strlen(input->buf) + promptlen;
@@ -44,7 +45,7 @@ prompt_input(const char *prompt, struct input *input)
 
 		last_buf_length = buf_length;
 		if (offset >= 0)
-			update_status("%s%.*s", prompt, pos, input->buf);
+			update_status(input->status, "%s%.*s", prompt, pos, input->buf);
 
 		if (get_input(offset, &key) == OK) {
 			int len = strlen(key.data.bytes);
@@ -172,6 +173,8 @@ read_prompt_incremental(const char *prompt, bool edit_mode, bool allow_empty, in
 
 	incremental.input.allow_empty = allow_empty;
 	incremental.input.data = data;
+	incremental.input.buf[0] = 0;
+	incremental.input.status[0] = 0;
 	incremental.handler = handler;
 	incremental.edit_mode = edit_mode;
 
@@ -182,7 +185,7 @@ read_prompt_incremental(const char *prompt, bool edit_mode, bool allow_empty, in
 static void
 readline_display(void)
 {
-	update_status("%s%s", rl_display_prompt, rl_line_buffer);
+	update_status("", "%s%s", rl_display_prompt, rl_line_buffer);
 	wmove(status_win, 0, strlen(rl_display_prompt) + rl_point);
 	wrefresh(status_win);
 }
@@ -511,7 +514,7 @@ prompt_menu(const char *prompt, const struct menu_item *items, int *selected)
 		char hotkey[] = { '[', (char) item->hotkey, ']', ' ', 0 };
 		int i;
 
-		update_status("%s (%d of %d) %s%s", prompt, *selected + 1, size,
+		update_status("", "%s (%d of %d) %s%s", prompt, *selected + 1, size,
 			      item->hotkey ? hotkey : "", item->text);
 
 		switch (get_input(COLS - 1, &key)) {

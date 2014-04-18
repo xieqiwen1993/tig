@@ -9,6 +9,7 @@ Improvements:
  - Improve the test suite portability to not depend on GNU sed. (GH #609, #614)
  - Make build reproducible. (https://reproducible-builds.org/) (GH #613)
  - Add `view-close-no-quit` action, unbound by default. (GH #607)
+ - Incremental search support. (GH #5)
 
 Bug fixes:
 
@@ -149,7 +150,7 @@ Improvements:
  - Add support for key combos. (GH #67)
  - See `contrib/vim.tigrc` for Vim-like keybindings. (GH #273, #351)
  - Add GitHub inspired file finder to search for and open any file. (GH #342)
- - Add `search` keymap for navigation file finder search results.
+ - Add `search` keymap for navigating file finder search results.
 
 Bug fixes:
 
